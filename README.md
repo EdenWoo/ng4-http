@@ -1,30 +1,28 @@
-# Angular 2/4 Http Interceptors and Authentication
+# Angular 2/4 Http Module with Interceptors
 
-This package provides two major missing features in angular2: Http Interceptors and Authentication.
+This package provides major missing feature in angular2: Http Interceptors.
 
 ## Http Interceptors
 
-Http Interceptors provides you ability to intercept all requests and modify then, if necessary or 
-retry them again.
+Http Interceptors provides you ability to intercept all requests and modify then, if necessary or retry them again.
+
+> For purposes of global error handling, authentication, or any kind of synchronous or asynchronous pre-processing of request or postprocessing of responses, it is desirable to be able to intercept requests before they are handed to the server and responses before they are handed over to the application code that initiated these requests. The interceptors leverage the promise APIs to fulfill this need for both synchronous and asynchronous pre-processing.
+> There are two kinds of interceptors (and two kinds of rejection interceptors):
+> * **request**: interceptors get called with a http config object. The function is free to modify the config object or create a new one. The function needs to return the config object directly, or a promise containing the config or a new config object.
+> * **requestError**: interceptor gets called when a previous interceptor threw an error or resolved with a rejection.
+> * **response**: interceptors get called with http response object. The function is free to modify the response object or create a new one. The function needs to return the  response object directly, or as a promise containing the response or a new response object.
+> * **responseError**: interceptor gets called when a previous interceptor threw an error or resolved with a rejection.
 
 #### Usage
 
 1. Import ```Interceptor``` interface from the package and create and provide your own Interceptor, e.g.:
 
 ```typescript
-import { Interceptor } from 'ng2-http-auth/http';
+import { Interceptor } from 'ng4-http';
 
 @Injectable()
 export class CustomInterceptor implements Interceptor {
 
-  constructor(private http: Http) {}
-
-  /**
-   * Request interceptor.
-   * @param {Request|string} url
-   * @param {RequestOptionsArgs} options
-   * @returns {Observable}
-   */
   public request({ url, options }: RequestInterceptorOptions): RequestInterceptorOptions {
     const urlString = url instanceof Request ? (<Request>url).url : url;
 
@@ -45,7 +43,7 @@ export class CustomInterceptor implements Interceptor {
 2. Register your custom interceptor by injecting ```InterceptorStore``` into your module, e.g.:
 
 ```typescript
-import { InterceptorStore } from 'ng2-http-auth/http';
+import { InterceptorStore } from 'ng4-http';
 
 @NgModule({
   providers: [ CustomInterceptor ]
@@ -57,123 +55,13 @@ export class AuthModule {
 }
 ```
 
-3. Use ```HttpModule``` and ```Http``` service from the package instead of native one, e.g.:
+3. Use ```HttpModule``` and ```Http``` service from the package instead of native ones, e.g.:
 
 ```typescript
-import { HttpModule } from 'ng2-http-auth/http';
+import { HttpModule } from 'ng4-http';
 
 @NgModule({
   imports: [ HttpModule ]
 })
-export class AuthModule {
-}
-
+export class AuthModule {}
 ```
-
-## Authentication module
-
-Authentication modules provides ability to attach authentication token automatically to the headers
-(through http interceptors), refresh token functionality, guards for protected or public pages and more.
-
-#### Usage
-
-1. Import ```AuthService``` interface to implement it with your custom Authentication service, e.g.:
-
-```typescript
-import { AuthService } from 'ng2-http-auth/auth';
-
-@Injectable()
-export class AuthenticationService implements AuthService {
-
-  constructor(private http: Http) {
-  }
-
-  isAuthorized(): Observable<boolean> {
-    const isAuthorized: boolean = !!localStorage.getItem('accessToken');
-
-    return Observable.of(isAuthorized);
-  }
-
-  logout(): void {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    location.reload(true);
-  }
-
-  getAccessToken(): Observable<string> {
-    const accessToken: string = localStorage.getItem('accessToken');
-
-    return Observable.of(accessToken);
-  }
-
-  refreshToken(): Observable<any> {
-    const refreshToken: string = localStorage.getItem('refreshToken');
-
-    return this.http
-      .post('http://localhost:3001/refresh-token', { refreshToken })
-      .catch(() => this.logout())
-  }
-
-  refreshShouldHappen(response: Response): boolean {
-    return response.status === 401;
-  }
-
-  isRefreshTokenRequest(url: string): boolean {
-    return url.endsWith('refresh-token');
-  }
-
-}
-```
-
-2. Specify ```PublicGuard``` for public routes and ```ProtectedGuard``` for protected respectively, e.g.:
-
-```typescript
-const publicRoutes: Routes = [
-  { path: '', component: LoginComponent, canActivate: [ PublicGuard ] }
-];
-```
-```typescript
-const protectedRoutes: Routes = [
-  {
-    path: '',
-    component: ProtectedComponent,
-    canActivate: [ ProtectedGuard ],
-    children: [
-      { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' }
-    ]
-  }
-];
-```
-
-2. Create additional ```AuthenticationModule``` and provide important providers and imports, e.g.:
-
-```typescript
-import { NgModule } from '@angular/core';
-import { AuthModule, AUTH_SERVICE, PUBLIC_FALLBACK_PAGE_URI, PROTECTED_FALLBACK_PAGE_URI } from 'ng2-http-auth/auth';
-
-import { AuthenticationService } from './authentication.service';
-
-@NgModule({
-    imports: [ AuthModule ],
-    providers: [
-      { provide: PROTECTED_FALLBACK_PAGE_URI, useValue: '/' },
-      { provide: PUBLIC_FALLBACK_PAGE_URI, useValue: '/login' },
-      { provide: AUTH_SERVICE, useClass: AuthenticationService }
-    ]
-})
-export class AuthenticationModule {
-
-}
-
-```
-
-where, 
-* ```PROTECTED_FALLBACK_PAGE_URI``` - main protected page to be redirected to, in case if user will reach public route, that is protected
-by ```PublicGuard``` and will be authenticated
-
-* ```PUBLIC_FALLBACK_PAGE_URI``` - main public page to be redirected to, in case if user will reach protected route, that is protected
-by ```ProtectedGuard``` and won't be authenticated
-
-* ```AUTH_SERVICE``` - Authentication service token providers
-
-3. Provide your ```AuthenticationModule``` in your ```AppModule```

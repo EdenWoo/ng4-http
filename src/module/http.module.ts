@@ -1,9 +1,5 @@
 import { NgModule } from '@angular/core';
-import {
-  HttpModule as _HttpModule,
-  RequestOptions,
-  XHRBackend
-} from '@angular/http';
+import { HttpModule as _HttpModule, RequestOptions, XHRBackend } from '@angular/http';
 
 import { Http, InterceptorStore } from '../service';
 import { httpFactory } from './http.factory';
