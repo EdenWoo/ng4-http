@@ -11,16 +11,16 @@ import { Observable } from 'rxjs/Observable';
 
 import {
   Interceptor,
-  Store,
   RequestInterceptorOptions,
   InterceptorType,
   MAP
 } from '../interfaces';
+import { InterceptorStore } from './interceptor.store';
 
 @Injectable()
 export class Http extends _Http {
 
-  constructor(backend: XHRBackend, defaultOptions: RequestOptions, private interceptorStore: Store) {
+  constructor(backend: XHRBackend, defaultOptions: RequestOptions, private interceptorStore: InterceptorStore) {
     super(backend, defaultOptions);
   }
 

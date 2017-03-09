@@ -3,8 +3,6 @@ import { Observable } from 'rxjs/Observable';
 
 /**
  * Request intereceptor options
- * @public
- * @export
  * @interface RequestInterceptorOptions
  */
 export interface RequestInterceptorOptions {
@@ -14,8 +12,6 @@ export interface RequestInterceptorOptions {
 
 /**
  * Response intereceptor options
- * @private
- * @export
  * @interface ResponseInterceptorOptions
  * @extends {RequestInterceptorOptions}
  */
@@ -25,8 +21,6 @@ export interface ResponseInterceptorOptions extends RequestInterceptorOptions {
 
 /**
  * Interceptor interface
- * @public
- * @export
  * @interface Interceptor
  */
 export interface Interceptor {
@@ -38,18 +32,7 @@ export interface Interceptor {
 }
 
 /**
- * Store interface
- * @private
- * @export
- * @interface Store
- */
-export interface Store {
-  interceptors: Interceptor[];
-}
-
-/**
  * Interceptor map interface
- * @private
  */
 export const MAP = [
   {
@@ -64,8 +47,6 @@ export const MAP = [
 
 /**
  * Interceptor types enum
- * @private
- * @export
  * @enum {number}
  */
 export enum InterceptorType {

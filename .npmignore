@@ -6,5 +6,4 @@ tsconfig.json
 tslint.json
 test.ts
 
-src/**/*
-lib/polyfills.*
+src/**/*.spec.ts

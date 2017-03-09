@@ -1,9 +1,8 @@
 {
   "name": "ng4-http",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Http module with interceptor functionality",
   "repository": "https://github.com/serhiisol/ng4-http",
-  "main": "lib/index.js",
   "keywords": [
     "angular2",
     "angular4",

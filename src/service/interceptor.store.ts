@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { Interceptor, Store } from '../interfaces';
+import { Interceptor } from '../interfaces';
 
 @Injectable()
-export class InterceptorStore implements Store {
+export class InterceptorStore {
 
   /**
    * All registered interceptors
