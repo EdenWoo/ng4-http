@@ -4,6 +4,10 @@ This package provides major missing feature in angular2: Http Interceptors.
 
 Note: Package is given in completely 100% pure TypeScript
 
+```
+npm install ng4-http --save
+```
+
 ## Http Interceptors
 
 Http Interceptors provides you ability to intercept all requests and modify then, if necessary or retry them again.
