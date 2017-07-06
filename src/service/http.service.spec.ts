@@ -8,7 +8,7 @@ import { Http } from './http.service';
 const TestUri = 'http://test.uri';
 const Body = { foo: 'bar' };
 
-function getBody(c: MockConnection): Object {
+function getBody(c: MockConnection): object {
   return JSON.parse(c.request.getBody());
 }
 
