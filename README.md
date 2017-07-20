@@ -1,5 +1,10 @@
 # Angular 2/4 Http Module with Interceptors
 
+## Breaking news
+Latest stable release of angular4 (4.3.0) received new module `@angular/common/http` with interceptor support.
+So this library still relevant if you will use angular lower than 4.3.0
+
+## About
 This package provides major missing feature in angular2: Http Interceptors.
 
 Note: Package is given in completely 100% pure TypeScript
